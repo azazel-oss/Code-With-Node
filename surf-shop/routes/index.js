@@ -41,12 +41,12 @@ router.get("/forgot", (req, res, next) => {
   res.send("GET /forgot");
 });
 
-/* PUT forgot-password. */
+/* PUT forgot-password/:token. */
 router.put("/forgot", (req, res, next) => {
   res.send("PUT /forgot");
 });
 
-/* GET reset-password. */
+/* GET reset-password/:token. */
 router.get("/reset/:token", (req, res, next) => {
   res.send("GET /reset/:token");
 });
