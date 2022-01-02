@@ -3,10 +3,27 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const passport = require("passport");
+const session = require("express-session");
+const User = require("./models/user");
+const mongoose = require("mongoose");
+
+// require route
 const indexRouter = require("./routes/index");
 const postsRouter = require("./routes/posts");
 const reviewsRouter = require("./routes/reviews");
+
 const app = express();
+
+mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB", {
+  useNewUrlParser: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function () {
+  console.log("Connection Completed");
+});
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -17,6 +34,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(
+  session({
+    secret: "hang ten dude!",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true },
+  })
+);
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use("/", indexRouter);
 app.use("/posts", postsRouter);
