@@ -2,9 +2,9 @@ const express = require("express");
 const req = require("express/lib/request");
 const router = express.Router();
 const passport = require("passport");
-const { postRegister } = require("../controllers/index");
+const { postRegister, postLogin, getLogout } = require("../controllers/index");
 // You can omit '/index' because javascript is smart enough to use index file
-const { errorHandler } = require("../middleware/index");
+const { asyncErrorHandler } = require("../middleware/index");
 
 /* GET home page. */
 router.get("/", (req, res, next) => {
@@ -17,7 +17,7 @@ router.get("/register", (req, res, next) => {
 });
 
 /* POST register page. */
-router.post("/register", errorHandler(postRegister));
+router.post("/register", asyncErrorHandler(postRegister));
 
 /* GET login. */
 router.get("/login", (req, res, next) => {
@@ -25,19 +25,10 @@ router.get("/login", (req, res, next) => {
 });
 
 /* POST login. */
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-);
+router.post("/login", postLogin);
 
 /* GET logout */
-router.get("/logout", (res, res, next) => {
-  req.logout();
-  res.redirect("/");
-});
+router.get("/logout", getLogout);
 
 /* GET profile. */
 router.get("/profile", (req, res, next) => {

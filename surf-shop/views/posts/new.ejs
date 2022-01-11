@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Post</title>
+  </head>
+  <body>
+    <h1>New Post</h1>
+    <form action="/posts" method="POST" enctype="multipart/form-data">
+      <div>
+        <input type="text" name="post[title]" id="title" placeholder="Title" />
+      </div>
+      <div>
+        <input type="text" name="post[price]" id="price" placeholder="Price" />
+      </div>
+      <div><input type="file" name="images" multiple accept="image/*" /></div>
+      <div>
+        <textarea
+          name="post[description]"
+          placeholder="Description"
+          id="description"
+          cols="30"
+          rows="10"
+        ></textarea>
+      </div>
+      <div>
+        <input
+          type="text"
+          name="post[location]"
+          id="location"
+          placeholder="Location"
+        />
+      </div>
+      <input type="submit" />
+    </form>
+  </body>
+</html>
