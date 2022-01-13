@@ -8,7 +8,12 @@
   </head>
   <body>
     <h1>Edit Post</h1>
-    <form action="/posts/<%= post.id %>?_method=PUT" method="post">
+    <form
+      action="/posts/<%= post.id %>?_method=PUT"
+      method="post"
+      id="postEditForm"
+      enctype="multipart/form-data"
+    >
       <div>
         <input
           type="text"
@@ -26,6 +31,28 @@
           placeholder="Price"
           value="<%= post.price %> "
         />
+      </div>
+      <div>
+        <input
+          type="file"
+          name="images"
+          multiple
+          accept="image/*"
+          id="imageUpload"
+        />
+        <% post.images.forEach((image, i) => { %>
+        <div>
+          <img src="<%= image.url %> " alt="Surf Board Image" width="200px" />
+          <label for="image<%= i %>">Delete?</label>
+          <input
+            type="checkbox"
+            id="image<%= i %>"
+            class="imageDeleteCheckbox"
+            value="<%= image.public_id %> "
+            name="deleteImages[]"
+          />
+        </div>
+        <% }) %>
       </div>
       <div>
         <textarea
@@ -51,3 +78,23 @@
     </form>
   </body>
 </html>
+
+<script>
+  let postEditForm = document.getElementById("postEditForm");
+  postEditForm.addEventListener("submit", (e) => {
+    let imageUploads = document.getElementById("imageUpload").files.length;
+    let existingImgs = document.querySelectorAll(".imageDeleteCheckbox").length;
+    let imgDeletion = document.querySelectorAll(
+      ".imageDeleteCheckbox:checked"
+    ).length;
+    let newTotal = existingImgs + imageUploads - imgDeletion;
+    if (newTotal > 4) {
+      e.preventDefault();
+      alert(
+        `We can't have more than 4 images for a single person. You need to remove at least ${
+          newTotal - 4
+        } image${newTotal - 4 > 1 ? "s" : ""}`
+      );
+    }
+  });
+</script>
