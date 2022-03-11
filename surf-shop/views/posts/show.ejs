@@ -4,6 +4,45 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans"
+      rel="stylesheet"
+    />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        width: 400px;
+        height: 300px;
+      }
+
+      .marker {
+        background-image: url("/images/mapbox-icon.png");
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .mapboxgl-popup {
+        max-width: 200px;
+      }
+
+      .mapboxgl-popup-content {
+        text-align: center;
+        font-family: "Open Sans", sans-serif;
+      }
+    </style>
+
     <title>Show Post</title>
   </head>
   <body>
@@ -16,6 +55,9 @@
       <img src="<%= image.url %>" alt="surf board image" width="200px" /> <br />
       <% }) %>
     </div>
+
+    <div id="map"></div>
+
     <div>
       <a href="/posts/<%= post.id %>/edit"><button>Edit</button></a>
     </div>
@@ -24,5 +66,33 @@
         <input type="submit" value="Delete" />
       </form>
     </div>
+    <script>
+      const post = <%- JSON.stringify(post) %>;
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiYXphemVsLW9zcyIsImEiOiJja3llMXFxMjQwN3NnMnBwaDZocWhkanY5In0.JZ8_N1g-cBkGD1bXwAVlCA";
+
+      const map = new mapboxgl.Map({
+        container: "map",
+        style: "mapbox://styles/mapbox/light-v10",
+        center: post.coordinates,
+        zoom: 7,
+      });
+
+      // add markers to map
+        // create a HTML element for each feature
+        const el = document.createElement("div");
+        el.className = "marker";
+
+        // make a marker for each feature and add to the map
+        new mapboxgl.Marker(el)
+          .setLngLat(post.coordinates)
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+              .setHTML(
+                `<h3>${post.title}</h3><p>${post.location}</p>`
+              )
+          )
+          .addTo(map);
+    </script>
   </body>
 </html>

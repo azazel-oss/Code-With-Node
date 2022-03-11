@@ -6,6 +6,7 @@
     "start": "nodemon ./bin/www"
   },
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.13.2",
     "cloudinary": "^1.28.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

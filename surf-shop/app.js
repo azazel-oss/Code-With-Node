@@ -18,7 +18,7 @@ const reviewsRouter = require("./routes/reviews");
 
 const app = express();
 
-mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB", {
+mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB-mapbox", {
   useNewUrlParser: true,
 });
 
