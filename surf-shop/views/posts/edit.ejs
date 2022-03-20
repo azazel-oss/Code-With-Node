@@ -1,100 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Post</title>
-  </head>
-  <body>
-    <h1>Edit Post</h1>
-    <form
-      action="/posts/<%= post.id %>?_method=PUT"
-      method="post"
-      id="postEditForm"
-      enctype="multipart/form-data"
+<% layout('layouts/boilerplate') -%>
+<h1>Edit Post</h1>
+<form
+  action="/posts/<%= post.id %>?_method=PUT"
+  method="post"
+  id="postEditForm"
+  enctype="multipart/form-data"
+>
+  <div>
+    <input
+      type="text"
+      name="post[title]"
+      id="title"
+      placeholder="Title"
+      value="<%= post.title %> "
+    />
+  </div>
+  <div>
+    <input
+      type="text"
+      name="post[price]"
+      id="price"
+      placeholder="Price"
+      value="<%= post.price %> "
+    />
+  </div>
+  <div>
+    <input
+      type="file"
+      name="images"
+      multiple
+      accept="image/*"
+      id="imageUpload"
+    />
+    <% post.images.forEach((image, i) => { %>
+    <div>
+      <img src="<%= image.url %> " alt="Surf Board Image" width="200px" />
+      <label for="image<%= i %>">Delete?</label>
+      <input
+        type="checkbox"
+        id="image<%= i %>"
+        class="imageDeleteCheckbox"
+        value="<%= image.public_id %> "
+        name="deleteImages[]"
+      />
+    </div>
+    <% }) %>
+  </div>
+  <div>
+    <textarea
+      name="post[description]"
+      placeholder="Description"
+      id="description"
+      cols="30"
+      rows="10"
     >
-      <div>
-        <input
-          type="text"
-          name="post[title]"
-          id="title"
-          placeholder="Title"
-          value="<%= post.title %> "
-        />
-      </div>
-      <div>
-        <input
-          type="text"
-          name="post[price]"
-          id="price"
-          placeholder="Price"
-          value="<%= post.price %> "
-        />
-      </div>
-      <div>
-        <input
-          type="file"
-          name="images"
-          multiple
-          accept="image/*"
-          id="imageUpload"
-        />
-        <% post.images.forEach((image, i) => { %>
-        <div>
-          <img src="<%= image.url %> " alt="Surf Board Image" width="200px" />
-          <label for="image<%= i %>">Delete?</label>
-          <input
-            type="checkbox"
-            id="image<%= i %>"
-            class="imageDeleteCheckbox"
-            value="<%= image.public_id %> "
-            name="deleteImages[]"
-          />
-        </div>
-        <% }) %>
-      </div>
-      <div>
-        <textarea
-          name="post[description]"
-          placeholder="Description"
-          id="description"
-          cols="30"
-          rows="10"
-        >
 <%= post.description %>
-        </textarea>
-      </div>
-      <div>
-        <input
-          type="text"
-          name="post[location]"
-          id="location"
-          placeholder="Location"
-          value="<%= post.location %> "
-        />
-      </div>
-      <input type="submit" />
-    </form>
-  </body>
-</html>
-
-<script>
-  let postEditForm = document.getElementById("postEditForm");
-  postEditForm.addEventListener("submit", (e) => {
-    let imageUploads = document.getElementById("imageUpload").files.length;
-    let existingImgs = document.querySelectorAll(".imageDeleteCheckbox").length;
-    let imgDeletion = document.querySelectorAll(
-      ".imageDeleteCheckbox:checked"
-    ).length;
-    let newTotal = existingImgs + imageUploads - imgDeletion;
-    if (newTotal > 4) {
-      e.preventDefault();
-      alert(
-        `We can't have more than 4 images for a single person. You need to remove at least ${
-          newTotal - 4
-        } image${newTotal - 4 > 1 ? "s" : ""}`
-      );
-    }
-  });
-</script>
+        </textarea
+    >
+  </div>
+  <div>
+    <input
+      type="text"
+      name="post[location]"
+      id="location"
+      placeholder="Location"
+      value="<%= post.location %> "
+    />
+  </div>
+  <input type="submit" />
+</form>
+<script src="/javascripts/post-edit.js"></script>

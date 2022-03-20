@@ -4,19 +4,19 @@ const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const geocodingClient = mbxGeocoding({ accessToken: process.env.MAPBOX_TOKEN });
 const cloudinary = require("cloudinary");
 cloudinary.config({
-  cloud_name: "anythingthatworks",
-  api_key: "686188685332888",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 module.exports = {
   async postIndex(req, res, next) {
     let posts = await Post.find({});
-    res.render("posts/index", { posts });
+    res.render("posts/index", { title: "Posts", posts });
   },
 
   postNew(req, res, next) {
-    res.render("posts/new");
+    res.render("posts/new", { title: "New post" });
   },
 
   async postCreate(req, res, next) {
@@ -37,11 +37,15 @@ module.exports = {
 
     req.body.post.coordinates = response.body.features[0].geometry.coordinates;
     let post = await Post.create(req.body.post);
+    req.session.success = "Post created successfully";
+    // req.flash("success", "Post created successfully");
     res.redirect(`/posts/${post.id}`);
   },
 
   async postShow(req, res, next) {
     let post = await Post.findById(req.params.id);
+    console.log("3");
+    console.log(req.session);
     res.render("posts/show", { post });
   },
 
