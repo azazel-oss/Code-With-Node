@@ -4,10 +4,9 @@ const createError = require("http-errors");
 const express = require("express");
 const engine = require("ejs-mate");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const passport = require("passport");
-const flash = require("connect-flash");
+// const flash = require("connect-flash");
 const User = require("./models/user");
 const mongoose = require("mongoose");
 const methodOverride = require("method-override");
@@ -19,7 +18,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -33,7 +32,7 @@ const postsRouter = require("./routes/posts");
 const reviewsRouter = require("./routes/reviews");
 
 // Connect the database
-mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB-mapbox", {
+mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB", {
   useNewUrlParser: true,
 });
 
@@ -52,7 +51,6 @@ app.set("view engine", "ejs");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
 
@@ -68,6 +66,12 @@ passport.deserializeUser(User.deserializeUser());
 
 // Set local variables middleware
 app.use(function (req, res, next) {
+  req.user = {
+    _id: "623daccc9358384c32937c82",
+    username: "asad",
+  };
+
+  res.locals.currentUser = req.user;
   // set default page title
   res.locals.title = "Surf Shop";
 
