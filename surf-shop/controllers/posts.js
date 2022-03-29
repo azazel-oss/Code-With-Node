@@ -57,7 +57,8 @@ module.exports = {
         model: "User",
       },
     });
-    res.render("posts/show", { post });
+    let floorRating = post.calculateAvgRating();
+    res.render("posts/show", { post, floorRating });
   },
 
   async postEdit(req, res, next) {

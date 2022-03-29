@@ -4,6 +4,20 @@
 <div>Price: <%= post.price %></div>
 <div><%= post.description %></div>
 <div><%= post.location %></div>
+
+<div>
+  <% for( let i = 0; i < 5; i++ ) { %> <% if (floorRating - i >= 1) { %>
+  <!-- Show full star -->
+  <i class="fa-solid fa-star"></i>
+  <% } else if (floorRating - i < 1 && floorRating - i > 0) { %>
+  <!-- Show half star -->
+  <i class="fa-regular fa-star-half-stroke"></i>
+  <% } else { %>
+  <!-- Show empty star -->
+  <i class="fa-regular fa-star"></i>
+  <% } %> <% } %>
+</div>
+
 <div>
   <% post.images.forEach(image => { %>
   <img src="<%= image.url %>" alt="surf board image" width="200px" /> <br />
