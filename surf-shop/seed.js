@@ -2,6 +2,7 @@ const faker = require("faker");
 const mongoose = require("mongoose");
 const Post = require("./models/post");
 const Review = require("./models/review");
+const cities = require("./cities");
 
 // Connect the database
 mongoose.connect("mongodb://127.0.0.1:27017/surfShopDB", {
@@ -15,20 +16,37 @@ db.once("open", function () {
 });
 
 async function seedPosts() {
-  await Review.deleteMany({});
   await Post.deleteMany({});
-  for (const _ of new Array(40)) {
-    const post = {
-      title: faker.lorem.word(),
-      description: faker.lorem.text(),
-      coordinates: [-122.0842499, 37.4224764],
+  await Review.deleteMany({});
+  for (const _ of new Array(600)) {
+    const random1000 = Math.floor(Math.random() * 1000);
+    const title = faker.lorem.word();
+    const description = faker.lorem.text();
+    const postData = {
+      title,
+      description,
+      location: `${cities[random1000].city}, ${cities[random1000].state}`,
+      geometry: {
+        type: "Point",
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ],
+      },
       author: {
         _id: "623daccc9358384c32937c82",
         username: "asad",
       },
     };
-    await Post.create(post);
+    let post = new Post(postData);
+    post.properties.description = `<strong><a href="/posts/${
+      post._id
+    }">${title}</a></strong><p>${post.location}</p><p>${description.substring(
+      0,
+      20
+    )}...</p>`;
+    post.save();
   }
+  console.log("600 new posts created");
 }
-
 seedPosts();

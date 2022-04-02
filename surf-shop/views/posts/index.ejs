@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate') -%>
 <h1>Post Index</h1>
+<div id="map"></div>
 <% include ../partials/paginate-post %> <% posts.docs.forEach(post => { %>
 <h2><%= post.title %></h2>
 <div>Price: <%= post.price %></div>
@@ -7,3 +8,9 @@
 <div><%= post.location %></div>
 <div><a href="/posts/<%= post.id %>">Show more</a></div>
 <% }) %> <% include ../partials/paginate-post %>
+
+<script>
+  mapboxgl.accessToken = "<%= mapBoxToken %>";
+  const posts = {features: <%- JSON.stringify(posts.docs) %>};
+</script>
+<script src="/javascripts/allPostsClusterMap.js"></script>

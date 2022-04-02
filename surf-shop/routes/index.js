@@ -2,14 +2,17 @@ const express = require("express");
 const req = require("express/lib/request");
 const router = express.Router();
 const passport = require("passport");
-const { postRegister, postLogin, getLogout } = require("../controllers/index");
+const {
+  landingPage,
+  postRegister,
+  postLogin,
+  getLogout,
+} = require("../controllers/index");
 // You can omit '/index' because javascript is smart enough to use index file
 const { asyncErrorHandler } = require("../middleware/index");
 
 /* GET home page. */
-router.get("/", (req, res, next) => {
-  res.render("index", { title: "Surf Shop - Home" });
-});
+router.get("/", asyncErrorHandler(landingPage));
 
 /* GET register page. */
 router.get("/register", (req, res, next) => {

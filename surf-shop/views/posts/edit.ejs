@@ -34,13 +34,13 @@
     />
     <% post.images.forEach((image, i) => { %>
     <div>
-      <img src="<%= image.url %> " alt="Surf Board Image" width="200px" />
+      <img src="<%= image.path %> " alt="Surf Board Image" width="200px" />
       <label for="image<%= i %>">Delete?</label>
       <input
         type="checkbox"
         id="image<%= i %>"
         class="imageDeleteCheckbox"
-        value="<%= image.public_id %> "
+        value="<%= image.filename %> "
         name="deleteImages[]"
       />
     </div>
