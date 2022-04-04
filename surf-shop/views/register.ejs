@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate') -%>
+
+<form action="/register" method="post">
+  <div>
+    <label for="username">Username:</label>
+    <input
+      type="text"
+      name="username"
+      id="username"
+      placeholder="username"
+      value="<%= username %>"
+      required
+    />
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      placeholder="password"
+      required
+    />
+  </div>
+  <div>
+    <label for="email">Email:</label
+    ><input
+      type="email"
+      name="email"
+      id="email"
+      placeholder="email"
+      value="<%= email %>"
+      required
+    />
+  </div>
+  <div>
+    <label for="image">Image:</label
+    ><input type="file" name="image" id="image" />
+  </div>
+  <input type="submit" value="Register" />
+</form>

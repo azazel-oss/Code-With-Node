@@ -11,21 +11,47 @@ module.exports = {
       title: "Surf Shop - Home",
     });
   },
+  getRegister(req, res, next) {
+    res.render("register", { title: "Register", email: "", username: "" });
+  },
   async postRegister(req, res, next) {
-    const newUser = new User({
-      username: req.body.username,
-      email: req.body.email,
-      image: req.body.image,
-    });
-    await User.register(newUser, req.body.password);
-    res.redirect("/");
+    try {
+      const user = await User.register(new User(req.body), req.body.password);
+      req.login(user, function (err) {
+        if (err) return next(err);
+        req.session.success = `Welcome to Surf-Shop, ${user.username}`;
+        res.redirect("/");
+      });
+    } catch (err) {
+      const { username, email } = req.body;
+      let error = err.message;
+      if (
+        error.includes("duplicate") &&
+        error.includes("index: email_1 dup key")
+      ) {
+        error = "A user with the given email has already been registered";
+      }
+      res.render("register", { title: "Register", username, email, error });
+    }
   },
 
-  postLogin(req, res, next) {
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login",
-    })(req, res, next);
+  getLogin(req, res, next) {
+    if (req.isAuthenticated()) return res.redirect("/");
+    res.render("login", { title: "Login" });
+  },
+  async postLogin(req, res, next) {
+    const { username, password } = req.body;
+    const { user, error } = await User.authenticate()(username, password);
+    if (!user && error) {
+      return next(error);
+    }
+    req.login(user, function (err) {
+      if (err) return next(err);
+      req.session.success = `Welcome back, ${username}`;
+      const redirectUrl = req.session.redirectTo || "/";
+      delete req.session.redirectTo;
+      res.redirect(redirectUrl);
+    });
   },
 
   getLogout(req, res, next) {

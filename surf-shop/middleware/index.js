@@ -1,4 +1,6 @@
 const Review = require("../models/review");
+const User = require("../models/user");
+const Post = require("../models/post");
 
 module.exports = {
   asyncErrorHandler: (fn) => (req, res, next) => {
@@ -13,5 +15,21 @@ module.exports = {
     }
     req.session.error = "You are not authorised to change this review";
     return res.redirect("/");
+  },
+  isLoggedIn: (req, res, next) => {
+    if (req.isAuthenticated()) return next();
+    req.session.error = "You need to be logged in to perform this action";
+    req.session.redirectTo = req.originalUrl;
+    res.redirect("/login");
+  },
+  isAuthor: async (req, res, next) => {
+    let post = await Post.findById(req.params.id);
+    console.log(post);
+    if (post.author.equals(req.user._id)) {
+      res.locals.post = post;
+      return next();
+    }
+    req.session.error = "Access denied!";
+    res.redirect("back");
   },
 };

@@ -6,6 +6,7 @@ const engine = require("ejs-mate");
 const path = require("path");
 const logger = require("morgan");
 const passport = require("passport");
+const favicon = require("serve-favicon");
 // const flash = require("connect-flash");
 const User = require("./models/user");
 const mongoose = require("mongoose");
@@ -53,6 +54,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(methodOverride("_method"));
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 
 // // Setup connect flash for flash messages
 // app.use(flash());
@@ -66,10 +68,10 @@ passport.deserializeUser(User.deserializeUser());
 
 // Set local variables middleware
 app.use(function (req, res, next) {
-  req.user = {
-    _id: "623daccc9358384c32937c82",
-    username: "asad",
-  };
+  // req.user = {
+  //   _id: "623daccc9358384c32937c82",
+  //   username: "asad",
+  // };
 
   res.locals.currentUser = req.user;
   // set default page title
@@ -93,9 +95,9 @@ app.use("/posts", postsRouter);
 app.use("/posts/:id/reviews", reviewsRouter);
 
 // catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   next(createError(404));
-// });
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
 // error handler
 app.use(function (err, req, res, next) {

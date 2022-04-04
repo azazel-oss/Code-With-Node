@@ -1,34 +1,30 @@
 const express = require("express");
-const req = require("express/lib/request");
 const router = express.Router();
-const passport = require("passport");
 const {
   landingPage,
+  getRegister,
   postRegister,
+  getLogin,
   postLogin,
   getLogout,
 } = require("../controllers/index");
 // You can omit '/index' because javascript is smart enough to use index file
-const { asyncErrorHandler } = require("../middleware/index");
+const { asyncErrorHandler, isLoggedIn } = require("../middleware/index");
 
 /* GET home page. */
 router.get("/", asyncErrorHandler(landingPage));
 
 /* GET register page. */
-router.get("/register", (req, res, next) => {
-  res.send("GET /register");
-});
+router.get("/register", getRegister);
 
 /* POST register page. */
 router.post("/register", asyncErrorHandler(postRegister));
 
 /* GET login. */
-router.get("/login", (req, res, next) => {
-  res.send("GET /login");
-});
+router.get("/login", getLogin);
 
 /* POST login. */
-router.post("/login", postLogin);
+router.post("/login", asyncErrorHandler(postLogin));
 
 /* GET logout */
 router.get("/logout", getLogout);
