@@ -37,6 +37,7 @@ module.exports = {
 
   getLogin(req, res, next) {
     if (req.isAuthenticated()) return res.redirect("/");
+    if (req.query.returnTo) req.session.redirectTo = req.headers.referer;
     res.render("login", { title: "Login" });
   },
   async postLogin(req, res, next) {
