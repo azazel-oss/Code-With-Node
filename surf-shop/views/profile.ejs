@@ -1,6 +1,12 @@
 <% layout('layouts/boilerplate') -%>
 
-<h1><%= currentUser.username %>'s Profile</h1>
+<h1>
+  <img
+    src="<%= currentUser.image.secure_url %>"
+    alt="<%= currentUser.username %>'s profile image"
+    class="profile-image"
+  /><%= currentUser.username %>'s Profile
+</h1>
 
 <% posts.forEach(post => { %>
 <div>
@@ -8,7 +14,13 @@
 </div>
 <% }) %>
 
-<form action="/profile?_method=PUT" method="POST" id="update-form" class="hide">
+<form
+  action="/profile?_method=PUT"
+  enctype="multipart/form-data"
+  method="POST"
+  id="update-form"
+  class="hide"
+>
   <div>
     <label for="username">Username:</label>
     <input
@@ -64,7 +76,7 @@
     />
   </div>
   <div>
-    <label for="image">Image:</label>
+    <label for="image">Image: <small>(this deletes existing)</small></label>
     <input type="file" id="image" name="image" />
   </div>
 

@@ -4,13 +4,13 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   email: { type: String, unique: true, required: true, dropDups: true },
-  image: String,
-  posts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Post",
+  image: {
+    secure_url: {
+      type: String,
+      default: "/public/default-profile.jpg",
     },
-  ],
+    public_id: String,
+  },
 });
 UserSchema.plugin(passportLocalMongoose);
 
