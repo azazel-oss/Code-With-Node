@@ -78,10 +78,10 @@ module.exports = {
     if (username) user.username = username;
     if (email) user.email = email;
     if (req.file) {
-      if (user.image.public_id)
-        await cloudinary.uploader.destroy(user.image.public_id);
-      const { secure_url, public_id } = res.file;
-      user.image = { secure_url, public_id };
+      if (user.image.filename)
+        await cloudinary.uploader.destroy(user.image.filename);
+      const { path, filename } = res.file;
+      user.image = { path, filename };
     }
     await user.save();
     const login = util.promisify(req.login.bind(req));
